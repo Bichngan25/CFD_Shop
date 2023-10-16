@@ -18,7 +18,7 @@ const SiginForm = () => {
     {
       email: [
         requireRule("Please enter your email"),
-        regrexRule("Please enter email with format abc@dè.com")
+        regrexRule("Please enter email with format abc@def.com")
       ],
       password:[
         requireRule("Please enter your password")
@@ -26,16 +26,16 @@ const SiginForm = () => {
     }
   );
  
-  const _onSubmit = (data) => {
+  const _onSubmit = (e) => {
     // preventDefault: k reload lai trang
-    data.preventDefault()
+    e.preventDefault()
     const errorObject = validate()
     if (Object.keys(errorObject).length > 0){
       console.log("Submit Error", errorObject)
     } else{
       setLoading(true);
       console.log("Submit success", form)
-      handleLogin?.(data, () => {
+      handleLogin?.(form, () => {
         setTimeout(() => {
           setLoading(false);
         }, 300);
