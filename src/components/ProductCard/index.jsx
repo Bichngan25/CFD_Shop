@@ -22,20 +22,24 @@ const ProductCard = ({ product }) => {
     // Xử lý sau
   };
   return (
-    <div>
+
       <div className="product product-2">
         <figure className="product-media">
           {/* **** */}
         {discount > 0 && (
           <span className="product-label label-circle label-sale">Sale</span>
         )}
-          <Link to={PATHS.PRODUCT_DETAIL}>
+          <Link to={PATHS.PRODUCTS + `/${slug}`} style={{height: 275}}>
             {images?.length > 0 ?
             (
             <img
               src={images[0]}
               alt="Product image"
               className="product-image"
+              style={{width:"100%",
+            height:"100%",
+            objectFit:"cover"
+          }}
             />
             ) : ( 
               <ImageWrapper>
@@ -95,7 +99,7 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
       </div>
-    </div>
+
   );
 };
 

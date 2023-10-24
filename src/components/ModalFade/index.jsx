@@ -5,15 +5,27 @@ import { useAuthContext } from "../../context/AuthContextProvider";
 import { ModalFadeContainer } from "../StyledComponents";
 import cn from "../../utils/cn";
 import { MODAL_TYPE } from "../../constants/general";
+import { useDispatch, useSelector } from "react-redux";
+import { handleCloseModal, handleShowModal } from "../../store/reducer/authReducer";
+import classNames from "classnames";
 
 const ModalFade = () => {
-  const { showedModal, handleShowModal, handleCloseModal } = useAuthContext();
+  // const { showedModal, handleShowModal, handleCloseModal } = useAuthContext();
+  const dispatch = useDispatch()
+  const {showedModal} = useSelector((state) => state.auth)
+  console.log("showedModal",showedModal)
   const _onTabChange = (e, tab) => {
     // the a
     e?.stopPropagation();
     e?.preventDefault();
-    handleShowModal?.(tab);
+    dispatch(handleShowModal(tab))
+    // handleShowModal?.(tab);
   };
+  const _onCloseModal = (e) =>{
+    e?.stopPropagation()
+    e?.preventDefault()
+    dispatch(handleCloseModal())
+  }
   return (
     <>
       {/* Sign in / Register Modal */}
@@ -33,7 +45,7 @@ const ModalFade = () => {
               <button
                 type="button"
                 className="close"
-                onClick={handleCloseModal}
+                onClick={_onCloseModal}
                 // data-dismiss="modal"
                 // aria-label="Close"
               >
@@ -87,6 +99,12 @@ const ModalFade = () => {
           </div>
         </div>
       </ModalFadeContainer>
+      {!!showedModal && (
+        <div
+        classNames="modal-backdrop fade show"
+        onClick={_onCloseModal}
+        ></div>
+      )}
     </>
   );
 };

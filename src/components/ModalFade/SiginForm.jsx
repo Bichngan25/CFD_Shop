@@ -1,75 +1,80 @@
 import React, { useState } from "react";
-import { useAuthContext } from "../../context/AuthContextProvider";
-import Input from "../Input";
-import useForm from "../../hooks/useForm";
-import { regrexRule, requireRule } from "../../utils/validate";
-import ComponentLoading from "../ComponentLoading";
 import Button from "../Button";
+import { MESSAGE, REGEX } from "../../constants/validate";
+import { useForm } from "react-hook-form";
+import { useAuthContext } from "../../context/AuthContextProvider";
+import { Input } from "../Input";
+import ComponentLoading from "../ComponentLoading";
+import { useDispatch } from "react-redux";
+import { handleLogin } from "../../store/reducer/authReducer";
+import { Result } from "antd";
+
 
 const SiginForm = () => {
-  const { handleLogin } = useAuthContext();
+  // const {handleLogin} = useAuthContext()
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
 
-  const { form, register, validate } = useForm(
-    {
-      email: "",
-      password: "",
-    },
-    {
-      email: [
-        requireRule("Please enter your email"),
-        regrexRule("Please enter email with format abc@def.com")
-      ],
-      password:[
-        requireRule("Please enter your password")
-      ]
-    }
-  );
- 
-  const _onSubmit = (e) => {
-    // preventDefault: k reload lai trang
-    e.preventDefault()
-    const errorObject = validate()
-    if (Object.keys(errorObject).length > 0){
-      console.log("Submit Error", errorObject)
-    } else{
-      setLoading(true);
-      console.log("Submit success", form)
-      handleLogin?.(form, () => {
-        setTimeout(() => {
-          setLoading(false);
-        }, 300);
-      });
-    }
-  };
-  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+		if (data && !loading.login) {
+			// setLoading(true);
+				// handleLogin?.(data,() =>{
+        //   setTimeout(() => {
+        //     setLoading(false)
+        //   }, 300);
+        // })
+       try {
+        const res = await dispatch(handleLogin(data)).unwrap()
+       } catch (error) {
+        console.log("error", error)
+       }
+		}}
+    // const renderLoading = useDebounce(loading.login, 300)
   return (
     <div>
       <form
-        onSubmit={_onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         style={{ position: "relative"}}
-         action="#"
+
       >
+
         {loading && <ComponentLoading/>}
         <Input
           label="Username or email address"
           required
-          placeholder="Username or email address"
-          {...register("email")}
+          {...register("email",{
+            required: MESSAGE.required,
+            pattern:{
+              value: REGEX.email,
+              message: MESSAGE.email
+            }
+          })}
+          error = {errors?.email?.message || ""}
+          // ref={registerRef}
         />
          <Input
-          label="Password"
+          label= "Password"
           required
-          placeholder="Password"
-          type="Password"
-          {...register("password")}
+          type="password"
+          {...register("password",{
+            required: MESSAGE.required
+          })}
+          error={errors?.password?.message || ""}
         />
+        <div className="form-footer">
           <Button type="submit" className="btn btn-outline-primary-2">
             <span>LOG IN</span>
             <i className="icon-long-arrow-right" />
           </Button>
+          </div>
       </form>
-    </div>
+      </div>
   );
 };
 

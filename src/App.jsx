@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import AboutPage from './pages/AboutPage'
 import BlogPage from './pages/BlogPage'
@@ -21,9 +21,25 @@ import MainLayout from './layout/MainLayout'
 import { PATHS } from './constants/paths'
 import PrivateRoute from './components/PrivateRoute'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+// import "./assets/style.css"
+import tokenMethod from './utils/token'
+import { handleGetProfile } from './store/reducer/authReducer'
+import { message } from 'antd'
+import { useDispatch } from 'react-redux'
 
 function App() {
   // const [count, setCount] = useState(0)
+  const dispatch = useDispatch()
+  useEffect(() =>{
+    message.config({
+      top: 80,
+      duration:3,
+      maxCount:3
+    })
+    if (tokenMethod.get()){
+      dispatch(handleGetProfile())
+    }
+  })
   return (
     <BrowserRouter >
       <Routes>

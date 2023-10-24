@@ -1,26 +1,32 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from "react"
 
-const Input = ({label, required, error,renderInput, ...rest}, ref) => {
-  
+export const InputM = ({
+  label,
+  required,
+  error, 
+  renderInput = undefined,
+  name = "",
+  ...inputProps
+}, 
+ref) =>{
   return (
-    <div>
-       <div className="form-group"
-       >
-              <label>{label} {required && <span>*</span>}</label>
-              {
-                renderInput?.({...rest, error}) || (
-                <input 
-
-                type="text"
-                {...rest}
-                className={`form-control ${error ? "formerror" : ""}`} 
-                ref={ref}/>
-                )
-              }
-              {error && <p className="form-error">{error}</p>}
-            </div>
-    </div>
+  <div className="form-group">
+    <label className="label" htmlFor={name}>
+      {label} {required && <span>*</span>}
+    </label>
+    {renderInput?.({...inputProps, ref: ref}) || (
+      <input
+      ref={ref}
+      className={`form-control $(!!error ? "input-error" : "")`}
+      name={name}
+      id={name}
+      {...inputProps}
+      />
+    )}
+    <p className="form-error" style={{minHeight: 23}}>
+      {error || ""}
+    </p>
+  </div>
   )
 }
-
-export default forwardRef(Input)
+export const Input =  forwardRef(InputM)

@@ -12,7 +12,7 @@ const MainLayout = () => {
   return (
     <>
     <MainContextProvider>
-        <AuthContextProvider>
+        {/* <AuthContextProvider> */}
             <div className='page-wrapper'>
                 <Header/>
                 <Outlet/>
@@ -21,7 +21,7 @@ const MainLayout = () => {
             <ScrollTop/>
             <MobileMenu/>
             <ModalFade/>
-        </AuthContextProvider>
+        {/* </AuthContextProvider> */}
     </MainContextProvider>
     </>
   )

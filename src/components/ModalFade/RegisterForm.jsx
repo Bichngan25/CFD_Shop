@@ -1,72 +1,78 @@
 import React, { useState } from "react";
-import { useAuthContext } from "../../context/AuthContextProvider";
-import useForm from "../../hooks/useForm";
-import { regrexRule, requireRule } from "../../utils/validate";
-import Button from "../Button";
-import Input from "../Input";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { PATHS } from "../../constants/paths";
 import ComponentLoading from "../ComponentLoading";
+import { useForm } from "react-hook-form";
+import { useAuthContext } from "../../context/AuthContextProvider";
+import { MESSAGE, REGEX } from "../../constants/validate";
+import Button from "../Button";
+import { Input } from "../Input";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { handleRegister } from "../../store/reducer/authReducer";
+
 
 const RegisterForm = () => {
-  const {handleRegister} = useAuthContext()
+  // const {handleRegister} = useAuthContext()
+  const dispatch = useDispatch()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const [loading, setLoading] = useState(false);
 
-  const {form, register, validate} = useForm (
-    {   
-        email:"",
-        password:"",
-     },
-     {
-        email: [
-        requireRule("Please enter your email"),
-        regrexRule("Please enter email with format abc@dè.com", "email")
-      ],
-      password: [requireRule("Please enter your password")],
-    }
-     )
-    const _onSubmit = (data) => {
-        data.preventDefault()
-        const errorObject = validate();
-        if (Object.keys(errorObject).length > 0 ) {
-            console.log("Submit Error", errorObject)
-          } else {
-            setLoading(true);
-            console.log("Submit Success", form)
-            // check ham neu ton tai duoi dang function k
-            if (typeof handleRegister === "function"){
-              handleRegister?.(form, () =>{
-                setTimeout(()=>{
-                setLoading(false)
-                alert("đăng nhâp thành công")
-                // nho goi ham de close
-                // handleCloseModal()
-            },300)
-            })
-            } else{
-              setLoading(false)
-            }
+    const onSubmit = async (data) => {
+        if(data) {
+          setLoading(true)
+          const { name, email, password} = data
+          const payload ={
+            firstName: name || "",
+            lastName: "",
+            email,
+            password
           }
+          try {
+            const res = await dispatch(handleRegister(payload)).unwrap()
+          } catch (error) {
+            console.log("error", error)
+          } finally{
+            setTimeout(() =>{
+              setLoading(false)
+            }, 300)
+          }
+        } 
     }
   return (
     <div>
         <form
-        onSubmit={_onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         style={{ position: "relative"}}
-         action="#">
+        //  action="#"
+         >
           {loading && <ComponentLoading/>}
           <Input
              label="Your email address"
             required
-            placeholder="Your email address"
-            {...register("email")}
+            {...register("email",{
+              required: MESSAGE.required,
+              pattern:{
+                value: REGEX.email,
+                message: MESSAGE.email
+              }
+            })}
+            error={errors?.email?.message || ""}
          />
         <Input
-            label={"Password"}
+            label="Password"
             required
-            placeholder="Password"
-            type="Password"
-            {...register("password")}
+            type="password"
+            {...register("password",{
+              required: MESSAGE.required
+            })}
+            error={errors?.password?.message || ""}
         />
           <div className="form-footer">
             <Button type="submit" className="btn btn-outline-primary-2">

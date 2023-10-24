@@ -2,24 +2,33 @@ import React from "react";
 import { useAuthContext } from "../../context/AuthContextProvider";
 import { MODAL_TYPE } from "../../constants/general";
 import tokenMethod from "../../utils/token";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PATHS } from "../../constants/paths";
+import { useDispatch, useSelector } from "react-redux";
+import { handleLogout, handleShowModal } from "../../store/reducer/authReducer";
 
 const HeaderTop = () => {
-  const { handleShowModal, handleLogout, profile } = useAuthContext();
-  console.log("profile", profile);
+  // const { profile } = useAuthContext();
+  // console.log("profile", profile);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const {profile} = useSelector((state) => state.auth)
+  // console.log("loading", loading)
+  // console.log("profile", profile)
   const { firstName, email } = profile || {};
-
   const _onShowAuthModal = (e) => {
     // the a
     e?.preventDefault();
-    e?.stopPropagation(true);
-    handleShowModal?.(MODAL_TYPE.login);
+    e?.stopPropagation();
+    dispatch(handleShowModal(MODAL_TYPE.login))
+    // handleShowModal?.(MODAL_TYPE.login);
   };
 
   const _onSignOut = (e) => {
     e.preventDefault();
-    handleLogout();
+    dispatch(handleLogout())
+    navigate(PATHS.HOME)
+    // handleLogout();
   };
   return (
     <div>

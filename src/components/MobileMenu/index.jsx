@@ -18,7 +18,7 @@ const MobileMenu = () => {
     setSelectedTab(tab);
   };
   return (
-    <div>
+    <>
       {/* Mobile Menu */}
       <div className="mobile-menu-overlay" 
                   onClick={handleCloseMobileMenuShow}
@@ -176,7 +176,7 @@ const MobileMenu = () => {
         {/* End .mobile-menu-wrapper */}
       </div>
       {/* End .mobile-menu-container */}
-    </div>
+      </>
   );
 };
 

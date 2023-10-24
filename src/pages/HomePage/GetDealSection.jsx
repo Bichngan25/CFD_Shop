@@ -1,46 +1,25 @@
-import React, { useState } from "react";
-import Input from "../../components/Input";
-import { regrexRule, requireRule } from "../../utils/validate";
-import Button from "../../components/Button";
-import { useAuthContext } from "../../context/AuthContextProvider";
+import React from "react";
+import { MESSAGE, REGEX } from "../../constants/validate";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import useForm from "../../hooks/useForm";
+import { Input, InputM } from "../../components/Input";
+import Button from "../../components/Button";
+
 
 const GetDealSection = ({ handleSubscribeDeal }) => {
-  const { handleShowModal, handleCloseModal, handleRegister } =
-    useAuthContext();
-  const [loading, setLoading] = useState(false);
-  const { form, register, validate } = useForm(
-    {
-      email: "",
-    },
-    {
-      email: [
-        requireRule("Please fill in this field"),
-        regrexRule("Please enter email with format abc@def.com", "email"),
-      ],
-    }
-  );
-  const _onSubmit = (e) => {
-    handleSubscribeDeal();
-    e.preventDefault();
-    const errorObject = validate();
-    if (Object.keys(errorObject).length > 0) {
-      console.log("Submit Error", errorObject);
-    } else {
-      setLoading(true);
-      console.log("Submit Success", form);
-      // check ham neu ton tai duoi dang function k
-      if (typeof handleSubscribeDeal === "function") {
-        handleSubscribeDeal?.(form, () => {
-          setTimeout(() => {
-            setLoading(false);
-          }, 300);
-        });
-      } else {
-        setLoading(false);
-      }
-    }
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+
+    email: "",
+
+  });
+
+  const _onSubmit = (value) => {
+    handleSubscribeDeal?.(value, reset);
   };
 
   return (
@@ -49,58 +28,60 @@ const GetDealSection = ({ handleSubscribeDeal }) => {
         <div
           className="cta cta-separator cta-border-image cta-half mb-0"
           style={{
+            // nhớ thêm / vào image
             backgroundImage: "url(/assets/images/demos/demo-3/bg-2.jpg)",
           }}
         >
           <div className="cta-border-wrapper bg-white">
             <div className="row">
               <div className="col-lg-6">
-                <div className="cta-wrapper cta-text text-center">
-                  <h3 className="cta-title">Shop Social</h3>
-                  <p className="cta-desc">
+                {/* Social media các bạn xử lý tuỳ ý */}
+                <div class="cta-wrapper cta-text text-center">
+                  <h3 class="cta-title">Shop Social</h3>
+                  <p class="cta-desc">
                     Donec nec justo eget felis facilisis fermentum. Aliquam
                     porttitor mauris sit amet orci.{" "}
                   </p>
-                  <div className="social-icons social-icons-colored justify-content-center">
+                  <div class="social-icons social-icons-colored justify-content-center">
                     <Link
-                      to="https://www.facebook.com/"
-                      className="social-icon social-facebook"
+                      to="https://www.facebook.com/?locale=vi_VN"
+                      class="social-icon social-facebook"
                       title="Facebook"
                       target="_blank"
                     >
-                      <i className="icon-facebook-f" />
+                      <i class="icon-facebook-f"></i>
                     </Link>
                     <Link
                       to="https://twitter.com/?lang=vi"
-                      className="social-icon social-twitter"
+                      class="social-icon social-twitter"
                       title="Twitter"
                       target="_blank"
                     >
-                      <i className="icon-twitter" />
+                      <i class="icon-twitter"></i>
                     </Link>
                     <Link
                       to="https://www.instagram.com/"
-                      className="social-icon social-instagram"
+                      class="social-icon social-instagram"
                       title="Instagram"
                       target="_blank"
                     >
-                      <i className="icon-instagram" />
+                      <i class="icon-instagram"></i>
                     </Link>
                     <Link
                       to="https://www.youtube.com/"
-                      className="social-icon social-youtube"
+                      class="social-icon social-youtube"
                       title="Youtube"
                       target="_blank"
                     >
-                      <i className="icon-youtube" />
+                      <i class="icon-youtube"></i>
                     </Link>
                     <Link
                       to="https://www.pinterest.com/"
-                      className="social-icon social-pinterest"
+                      class="social-icon social-pinterest"
                       title="Pinterest"
                       target="_blank"
                     >
-                      <i className="icon-pinterest" />
+                      <i class="icon-pinterest"></i>
                     </Link>
                   </div>
                 </div>
@@ -113,18 +94,24 @@ const GetDealSection = ({ handleSubscribeDeal }) => {
                     receive <span className="text-primary">$20 coupon</span> for
                     first shopping{" "}
                   </p>
-                  {/* **** submit***** */}
-                  <form onClick={_onSubmit}>
+                  <form onSubmit={handleSubmit(_onSubmit)}>
                     <div className="input-group">
+                      {/* <div className="form-group"> */}
                       <Input
-                        lable="Email"
+                      // label="Email Adress"
                         type="text"
                         className="form-control"
                         placeholder="Enter your Email Address"
-                        // aria-label="Email Adress"
-                        {...register("email")}
-                        style={{ display: "initial" }}
+                        {...register("email", {
+                          required: MESSAGE.required,
+                          pattern: {
+                            value: REGEX.email,
+                            message: MESSAGE.email,
+                          },
+                        })}
+                        style={{margin_bottom : "20px"}}
                       />
+                      {/* </div> */}
                       <div className="input-group-append">
                         <Button
                           className="btn btn-primary btn-rounded"
@@ -134,16 +121,17 @@ const GetDealSection = ({ handleSubscribeDeal }) => {
                         </Button>
                       </div>
                     </div>
+
+                    <p 
+                      className="form-error"
+                      style={{
+                        textAlign: "left",
+                        minHeight: 23,
+                      }}
+                    >
+                      {errors?.email?.message || ""}
+                    </p>
                   </form>
-                  <p
-                    className="form-error"
-                    style={{
-                      textAlign: "left",
-                      minHeight: 23,
-                    }}
-                  >
-                    {/* {errors?.email?.message || ""} */}
-                  </p>
                 </div>
               </div>
             </div>
