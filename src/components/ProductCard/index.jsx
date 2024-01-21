@@ -4,6 +4,8 @@ import { PATHS } from "../../constants/paths";
 import { formatCurrency } from "../../utils/format";
 import { Empty } from "antd";
 import { styled } from "styled-components";
+import { useDispatch } from "react-redux";
+import { handleAddCart } from "../../store/reducer/cartReducer";
 
 const ImageWrapper = styled.div`
   width: 100%;
@@ -16,10 +18,20 @@ const ImageWrapper = styled.div`
 
 
 const ProductCard = ({ product }) => {
+  const dispatch = useDispatch()
   const { id, slug, title, price, rating, images, discount } = product || {};
+  const productPath = PATHS.PRODUCTS + `/${slug}`
+
   const _onAddToCart = (e) => {
     e?.preventDefault();
     // Xử lý sau
+    const addPayload = {
+      addedId: id,
+      addedColor: color?.[0] || "",
+      addeddQuantity: 1,
+      addedPrice: price - discount
+    }
+    dispatch(handleAddCart(addPayload))
   };
   return (
 

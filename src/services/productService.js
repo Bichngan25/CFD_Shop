@@ -4,6 +4,9 @@ export const productService = {
     getProducts(query = ""){
         return axiosInstance.get(`/products${query}`)
     },
+    getProductDetail(slug = ""){
+        return axiosInstance.get(`/products/${slug}`)
+    },
     getProductBySlug(slug = ""){
         return axiosInstance.get(`/products/${slug}`)
     },
@@ -13,4 +16,7 @@ export const productService = {
     getCategoryBySlug(slug = ""){
         return axiosInstance.get(`/product-categories/${slug}`)
     },
+    getProductReview(id = "", query = "") {
+        return axiosInstance.get(`/reviews/product/${id}${query}`)
+    }
 }

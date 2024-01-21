@@ -9,10 +9,9 @@ import useProductPage from "./useProductPage";
 import Pagination from "../../components/Pagination";
 
 const ProductPage = () => {
-  const { productListProps, pagiProps} = useProductPage();
+  const { productListProps, pagiProps, tooboxProps ,filterProps} = useProductPage();
   return (
-    <div>
-
+    
       <main className="main">
         <div
           className="page-header text-center"
@@ -36,17 +35,17 @@ const ProductPage = () => {
           <div className="container">
             <div className="row">
               <div className="col-lg-9">
-                <ProductToolbox />
-                <ProductList {...productListProps}/>
+                <ProductToolbox {...tooboxProps} />
+                <ProductList {...productListProps} />
                 {/* chuyen trang */}
-                <Pagination {...pagiProps}/>
+                <Pagination {...pagiProps} />
               </div>
-              <ProductFilter />
+              <ProductFilter {...filterProps}/>
             </div>
           </div>
         </div>
       </main>
-    </div>
+
   );
 };
 

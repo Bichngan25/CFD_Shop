@@ -26,6 +26,7 @@ import tokenMethod from './utils/token'
 import { handleGetProfile } from './store/reducer/authReducer'
 import { message } from 'antd'
 import { useDispatch } from 'react-redux'
+import { handleAddCart } from './store/reducer/cartReducer'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -38,6 +39,8 @@ function App() {
     })
     if (tokenMethod.get()){
       dispatch(handleGetProfile())
+      // handleGetCart
+      // dispatch(handleAddCart())
     }
   })
   return (

@@ -47,7 +47,7 @@ const Pagination = ({ page, limit = 0, total = 0, onPagiChange }) => {
     }
   };
 
-  const onPre = () => {
+  const onPrev = () => {
     const prePage = page - 1;
     if (prePage > 0) {
       onPagiChange(prePage);
@@ -64,75 +64,81 @@ const Pagination = ({ page, limit = 0, total = 0, onPagiChange }) => {
   return (
     <nav aria-label="Page navigation">
       <ul className="pagination justify-content-center">
-        <PagiItem isDisabled={page === 1} onClick={onPre}>
-          {/* <a
-            className="page-link page-link-prev"
-            href="#"
-            aria-label="Previous"
-            tabIndex={-1}
-            aria-disabled="true"
-          > */}
-            <span aria-hidden="true">
-              <i className="icon-long-arrow-left" />
-            </span>
-            Prev{" "}
-          {/* </a> */}
+        <PagiItem isDisabled={page === 1} onClick={onPrev}>
+          <span aria-hidden="true">
+            <i className="icon-long-arrow-left" />
+          </span>
+          Prev
         </PagiItem>
-        <PagiItem isDisabled={pageList[0] === 1} onClick={onFirst}> First
-          {/* <a className="page-link" href="#">
-            1
-          </a> */}
+        <PagiItem isDisabled={pageList[0] === 1} onClick={onFirst}>
+          First
         </PagiItem>
-        {pageList?.length > 0 && 
-        pageList.map((pageNumb) => (
-            <PagiItem key={pageNumb} isActive={pageNumb === page}
-            onClick={() =>{
-                console.log("pageNumb", pageNumb)
-                onPagiChange(pageNumb)
-            }}>
-                {pageNumb}
+        {pageList?.length > 0 &&
+          pageList.map((pageNumb) => (
+            <PagiItem
+              key={pageNumb}
+              isActive={pageNumb === page}
+              onClick={() => {
+                console.log("pageNumb", pageNumb);
+                onPagiChange(pageNumb);
+              }}
+            >
+              {pageNumb}
             </PagiItem>
-        ))}
+          ))}
         <PagiItem className="page-item-total">of {totalPage}</PagiItem>
-        <PagiItem isDisabled={pageList[pageList.length -1] === totalPage}
-        onClick={onLast}>  Last
+        <PagiItem
+          isDisabled={pageList[pageList.length - 1] === totalPage}
+          onClick={onLast}
+        >
+          Last
         </PagiItem>
-            <PagiItem isDisabled={pageList[pageList.length - 1] === page} onClick={onNext}>Next
-            <span aria-hidden="true"> 
-            <i className="icon-long-arroe-right"/>
-            </span>
-            </PagiItem>
+        <PagiItem
+          isDisabled={pageList[pageList.length - 1] === page}
+          onClick={onNext}
+        >
+          Next
+          <span aria-hidden="true">
+            <i className="icon-long-arroe-right" />
+          </span>
+        </PagiItem>
       </ul>
     </nav>
   );
 };
 
 const PagiItem = ({
-    children,
-    isActive = false,
-    isDisabled = false,
-    className = "",
-    onClick,
-    ...props
+  children,
+  isActive = false,
+  isDisabled = false,
+  className = "",
+  onClick,
+  ...props
 }) => {
-    return(
-        <PagiItemWrapper className={`page-item ${className} ${isActive ? "active" : ""} ${isDisabled ? "disabled" : ""}`}
-        onClick={() => (isDisabled ? {} : onClick())}
-        {...props}
-        >
-            <a className="page-link" role="button">{children}</a>
-        </PagiItemWrapper>
+  return (
+    <PagiItemWrapper
+      className={`page-item ${className} ${isActive ? "active" : ""} ${
+        isDisabled ? "disabled" : ""
+      }`}
+      onClick={() => (isDisabled ? {} : onClick())}
+      {...props}
+    >
+      <a className="page-link" role="button">
+        {children}
+      </a>
+    </PagiItemWrapper>
+  );
+};
 
-    )
-}
-
-const PagiItemWrapper = styled.li`margin: 0 10px;
-.page-link{
-    &:hover{
-        color: #fcb941 !important
+const PagiItemWrapper = styled.li`
+  margin: 0 10px;
+  .page-link {
+    &:hover {
+      color: #fcb941 !important;
     }
     display: flex;
-    gap: 10px
-}`
+    gap: 10px;
+  }
+`;
 
 export default Pagination;

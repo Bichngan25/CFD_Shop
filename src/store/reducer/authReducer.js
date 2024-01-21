@@ -8,6 +8,7 @@ import tokenMethod from "../../utils/token";
 import { message } from "antd";
 import { authService } from "../../services/AuthService";
 import thunk from "redux-thunk";
+import { handleGetCart } from "./cartReducer";
 
 const initialState = {
   showedModal: "",
@@ -127,6 +128,7 @@ export const handleLogin = createAsyncThunk(
         refreshToken
       })
       dispatch(handleGetProfile());
+      // dispatch(handleGetCart())
         message.success("Đăng nhập thành công")
         // dispatch(handleCloseModal())
       return true

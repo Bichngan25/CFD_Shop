@@ -30,7 +30,7 @@ const HomePage = () => {
             <div className="container">
               <hr className="mt-5 mb-0" />
             </div>
-            <ServiceSection{...serviceProps}/>
+            <ServiceSection {...serviceProps}/>
             <GetDealSection {...getDealProps}/>
           </main>
         </div>

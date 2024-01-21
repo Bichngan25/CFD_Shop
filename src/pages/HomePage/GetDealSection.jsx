@@ -109,11 +109,12 @@ const GetDealSection = ({ handleSubscribeDeal }) => {
                             message: MESSAGE.email,
                           },
                         })}
-                        style={{margin_bottom : "20px"}}
+                        // style={{margin_top : "-26px"}}
                       />
                       {/* </div> */}
                       <div className="input-group-append">
                         <Button
+                        style={{top : "26px"}}
                           className="btn btn-primary btn-rounded"
                           type="submit"
                         >
